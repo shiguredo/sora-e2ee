@@ -29,13 +29,13 @@ WebRTC SFU Sora 利用時に E2EE をブラウザで実現するためのライ�
 - WebRTC SFU Sora 経由で送られます
 - Connection ID は Clockwork Base32 の文字列をそのまま利用しています
 
-### メッセージヘッダー
+### メッセージヘッダー仕様
 
 ```erlang
 -define(E2EE_PRE_KEY_MESSAGE_TYPE, 0).
 -define(E2EE_CIPHER_MESSAGE_TYPE,  1).
 
-<<MessageType:8, Reserved:8, CiphertextLength:16>>
+<<MessageType:8, Reserved:8, CiphertextLength:16>>.
 ```
 
 - MessageType
@@ -51,15 +51,15 @@ WebRTC SFU Sora 利用時に E2EE をブラウザで実現するためのライ�
     - 16 ビット
     - 暗号化されたメッセージのバイト数です
 
-### PreKey メッセージ
+### PreKey メッセージ仕様
 
 ```erlang
 <<?E2EE_PRE_KEY_MESSAGE_TYPE:8, 0:8, 0:16,
   SrcConnectionID:26/binary, DstConnectionID:26/binary,
-  IdentityKey:32/binary, EphemeralKey:32/binary>>
+  IdentityKey:32/binary, EphemeralKey:32/binary>>.
 ```
 
-### Cipher メッセージ
+### Cipher メッセージ仕様
 
 ```erlang
 <<?E2EE_CIPHER_MESSAGE_TYPE:8, 0:8, CiphertextLength:16,
@@ -67,7 +67,7 @@ WebRTC SFU Sora 利用時に E2EE をブラウザで実現するためのライ�
   %% ここは CipherMessage ヘッダー
   RachetPublicKey:32/binary, N:32, NP:32,
   %% 本体
-  Ciphertext/binary>>
+  Ciphertext/binary>>.
 ```
 
 ## 利用方法
