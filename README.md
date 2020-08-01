@@ -28,23 +28,29 @@ WebRTC SFU Sora 利用時に E2EE をブラウザで実現するためのライ�
 ### メッセージヘッダー
 
 ```erlang
+-define(E2EE_PRE_KEY_MESSAGE_TYPE, 0).
+-define(E2EE_CIPHER_MESSAGE_TYPE,  1).
+
 <<MessageType:8, Reserved:8, CiphertextLength:16>>
 ```
 
 - MessageType
-    - PreKeyMessageType
-        - 0
-    - CipherMessageType
-        - 1
+    - 8 ビット
+    - 0
+        - PreKey メッセージ
+    - 1
+        - Cipher メッセージ
 - Reserved
-    - 必ず 0 である必要があります
+    - 8 ビット
+    - 必ず 0
 - CiphertextLength
-    - Ciphertext のバイト数です
+    - 16 ビット
+    - 暗号化されたメッセージのバイト数です
 
 ### PreKey メッセージ
 
 ```erlang
-<<?E2EE_CIPHER_MESSAGE_TYPE:8, 0:8, 0:16,
+<<?E2EE_PRE_KEY_MESSAGE_TYPE:8, 0:8, 0:16,
   SrcConnectionID:26/binary, DstConnectionID:26/binary,
   IdentityKey:32/binary, EphemeralKey:32/binary>>
 ```
@@ -62,7 +68,22 @@ WebRTC SFU Sora 利用時に E2EE をブラウザで実現するためのライ�
 
 ## 利用方法
 
+```javascript
+// 初期化
+e2ee.init();
 
+// connection.created 通知が飛んできたときの処理
+e2ee.start(remoteConnectionId, remoteIdentityKey, remoteSignedPreKey, remotePreKeySignature);
+
+e2ee.receive_message(message);
+
+e2ee.stop(remoteConnectionId);
+```
+
+```javascript
+// PreKey バンドルを登録する
+e2ee.addPreKeyBundle(remoteIdentityKey, remoteSignedPreKey, remotePreKeySignature)
+```
 
 ## ライセンス
 
