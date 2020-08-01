@@ -7,18 +7,22 @@
 WebRTC SFU Sora 利用時に E2EE をブラウザで実現するためのライブラリです。
 これ単体では利用できず Sora JS SDK と Sora E2EE ライブラリの２つと組み合わせて使います。
 
+## 注意
+
+このライブラリは現時点で実験的機能として提供しているため、プロダクションでの利用をおすすめしません。
+
 ## 利用技術
 
 - WebAssembly
     - [WebAssembly \| MDN](https://developer.mozilla.org/ja/docs/WebAssembly)
+- Go "syscall/js"
+    - [js \- The Go Programming Language](https://golang.org/pkg/syscall/js/)
 - The XEdDSA and VXEdDSA Signature Schemes
     - [Signal >> Specifications >> The XEdDSA and VXEdDSA Signature Schemes](https://signal.org/docs/specifications/xeddsa/)
 - The X3DH Key Agreement Protocol
     - [Signal >> Specifications >> The X3DH Key Agreement Protocol](https://signal.org/docs/specifications/x3dh/)
 - The Double Ratchet Algorithm
     - [Signal >> Specifications >> The Double Ratchet Algorithm](https://signal.org/docs/specifications/doubleratchet/)
-- Go "syscall/js"
-    - [js \- The Go Programming Language](https://golang.org/pkg/syscall/js/)
 
 ## メッセージプロトコル
 
@@ -71,17 +75,25 @@ WebRTC SFU Sora 利用時に E2EE をブラウザで実現するためのライ�
 ```javascript
 // 初期化
 e2ee.init();
+```
 
-// connection.created 通知が飛んできたときの処理
+```javascript
+// シグナリングキーで送られてきた参加した端末の Connection ID と PreKey バンドルを渡す
 e2ee.start(remoteConnectionId, remoteIdentityKey, remoteSignedPreKey, remotePreKeySignature);
+```
 
+```javascript
+// シグナリング経由で送られてきたバイナリメッセージを渡す
 e2ee.receive_message(message);
+```
 
+```javascript
+// シグナリング経由で送られてきた離脱した端末の Connection ID を渡す
 e2ee.stop(remoteConnectionId);
 ```
 
 ```javascript
-// PreKey バンドルを登録する
+// シグナリング経由で送られてきた PreKey バンドルを登録する
 e2ee.addPreKeyBundle(remoteIdentityKey, remoteSignedPreKey, remotePreKeySignature)
 ```
 
