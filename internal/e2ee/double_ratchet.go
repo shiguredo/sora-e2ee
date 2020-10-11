@@ -19,8 +19,8 @@ type ratchetHeader struct {
 }
 
 type ratchetKeyPair struct {
-	privateKey [32]byte
-	publicKey  [32]byte
+	privateKey x25519PrivateKey
+	publicKey  x25519PublicKey
 }
 
 /// skipped 向け
@@ -58,7 +58,7 @@ func generateRatchetKeyPair() (*ratchetKeyPair, error) {
 	}, nil
 }
 
-func kdfRk(previousRootKey []byte, senderRatchetKeyPrivate [32]byte, receiverRatchetKeyPublic [32]byte) ([]byte, []byte, error) {
+func kdfRk(previousRootKey []byte, senderRatchetKeyPrivate x25519PrivateKey, receiverRatchetKeyPublic x25519PublicKey) ([]byte, []byte, error) {
 	a := dh(senderRatchetKeyPrivate, receiverRatchetKeyPublic)
 
 	hash := sha256.New
@@ -100,7 +100,7 @@ func senderRatchetInit(sk []byte, preKeyBundle preKeyBundle) (*ratchetState, err
 	}, nil
 }
 
-func receiverRatchetInit(sk []byte, signedPreKeyPublic [32]byte, signedPreKeyPrivate [32]byte) *ratchetState {
+func receiverRatchetInit(sk []byte, signedPreKeyPublic x25519PublicKey, signedPreKeyPrivate x25519PrivateKey) *ratchetState {
 	return &ratchetState{
 		// 初回は receiver の signedPreKey を利用する
 		// A = ECDH-X25519(Sender_RatchetKey, Receiver_SignedPreKey)
