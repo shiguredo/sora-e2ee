@@ -17,7 +17,10 @@ import (
 type ed25519PublicKey = []byte
 type ed25519PrivateKey = []byte
 
-func dh(privateKey [32]byte, publicKey [32]byte) [32]byte {
+type x25519PublicKey = [32]byte
+type x25519PrivateKey = [32]byte
+
+func dh(privateKey x25519PrivateKey, publicKey x25519PublicKey) [32]byte {
 	var dh [32]byte
 
 	curve25519.ScalarMult(&dh, &privateKey, &publicKey)
@@ -26,8 +29,8 @@ func dh(privateKey [32]byte, publicKey [32]byte) [32]byte {
 }
 
 type x25519KeyPair struct {
-	publicKey  [32]byte
-	privateKey [32]byte
+	publicKey  x25519PublicKey
+	privateKey x25519PrivateKey
 }
 
 func generateX25519KeyPair() (*x25519KeyPair, error) {
@@ -40,10 +43,10 @@ func generateX25519KeyPair() (*x25519KeyPair, error) {
 		return nil, err
 	}
 
-	var copyPrivateKey [32]byte
+	var copyPrivateKey x25519PrivateKey
 	copy(copyPrivateKey[:], privateKey)
 
-	var copyPublicKey [32]byte
+	var copyPublicKey x25519PublicKey
 	copy(copyPublicKey[:], publicKey)
 
 	return &x25519KeyPair{
@@ -68,15 +71,15 @@ func generateEd25519KeyPair() (*ed25519KeyPair, error) {
 	}, nil
 }
 
-func (e *ed25519KeyPair) publicEd25519KeyToCurve25519() ([32]byte, error) {
+func (e *ed25519KeyPair) publicEd25519KeyToCurve25519() (x25519PublicKey, error) {
 	return publicEd25519KeyToCurve25519(e.publicKey)
 }
 
-func (e *ed25519KeyPair) privateEd25519KeyToCurve25519() [32]byte {
+func (e *ed25519KeyPair) privateEd25519KeyToCurve25519() x25519PrivateKey {
 	return privateEd25519KeyToCurve25519(e.privateKey)
 }
 
-func publicEd25519KeyToCurve25519(edPubKey ed25519PublicKey) ([32]byte, error) {
+func publicEd25519KeyToCurve25519(edPubKey ed25519PublicKey) (x25519PublicKey, error) {
 	var edPk [ed25519.PublicKeySize]byte
 	var curveKey [32]byte
 	copy(edPk[:], edPubKey)
@@ -87,7 +90,7 @@ func publicEd25519KeyToCurve25519(edPubKey ed25519PublicKey) ([32]byte, error) {
 	return curveKey, nil
 }
 
-func privateEd25519KeyToCurve25519(edSKey ed25519PrivateKey) [32]byte {
+func privateEd25519KeyToCurve25519(edSKey ed25519PrivateKey) x25519PrivateKey {
 	var edSk [ed25519.PrivateKeySize]byte
 	var curveKey [32]byte
 	copy(edSk[:], edSKey)
