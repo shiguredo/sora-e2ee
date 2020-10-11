@@ -34,7 +34,6 @@ type mkskippedKey struct {
 	N  uint32
 }
 
-// ratchet state は senderSession として持つのが良さそう
 type ratchetState struct {
 	selfDH         ratchetKeyPair
 	remoteDH       [32]byte

@@ -13,7 +13,7 @@ import (
 // signedPreKey 定期交換
 // oneTimePreKey x N
 
-// 一旦ワンタイププリキーは忘れる
+// TODO(v): oneTimePreKey に対応する
 type preKeyBundle struct {
 	identityKey     []byte
 	signedPreKey    [32]byte
@@ -24,7 +24,7 @@ func rootKey(dh1 [32]byte, dh2 [32]byte, dh3 [32]byte) ([]byte, error) {
 	hash := sha256.New
 	secret := secret(dh1, dh2, dh3)
 
-	// これで 0 でうまったものが生成される
+	// 0 でうまったものを生成
 	salt := make([]byte, hash().Size())
 	info := []byte("SoraText")
 	hkdf := hkdf.New(hash, secret, salt, info)
@@ -38,10 +38,10 @@ func rootKey(dh1 [32]byte, dh2 [32]byte, dh3 [32]byte) ([]byte, error) {
 	return rootKey, nil
 }
 
-// remote 関連は remotePreKeyBundle struct で管理したいところ
+// remote 関連は remotePreKeyBundle struct で管理したい
 func senderRootKey(selfX25519IdentityPrivateKey [32]byte, selfEphemeralPrivateKey [32]byte,
 	remoteX25519IdentityKey [32]byte, remoteSignedPreKey [32]byte) ([]byte, error) {
-	// TODO(v): OneTimeKey dh4 にも対応する
+	// TODO(v): OneTimePreKey dh4 にも対応する
 	dh1 := dh(selfX25519IdentityPrivateKey, remoteSignedPreKey)
 	dh2 := dh(selfEphemeralPrivateKey, remoteX25519IdentityKey)
 	dh3 := dh(selfEphemeralPrivateKey, remoteSignedPreKey)
@@ -51,7 +51,7 @@ func senderRootKey(selfX25519IdentityPrivateKey [32]byte, selfEphemeralPrivateKe
 
 func receiverRootKey(selfIdentityPrivateKey [32]byte, selfPrePrivateKey [32]byte,
 	remoteX25519IdentityKey [32]byte, remoteEphemeralKey [32]byte) ([]byte, error) {
-	// TODO(v): OneTimeKey dh4 にも対応する
+	// TODO(v): OneTimePreKey dh4 にも対応する
 	dh1 := dh(selfPrePrivateKey, remoteX25519IdentityKey)
 	dh2 := dh(selfIdentityPrivateKey, remoteEphemeralKey)
 	dh3 := dh(selfPrePrivateKey, remoteEphemeralKey)
