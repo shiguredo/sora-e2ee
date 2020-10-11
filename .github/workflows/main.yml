@@ -20,9 +20,19 @@ jobs:
       - uses: actions/checkout@v2
       - run: make
       - run: make test
+      - run: sudo apt install brotli
+      - run: make brotli
       - run: go env
       - name: Slack Notification
         if: failure()
         uses: rtCamp/action-slack-notify@v2.1.0
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+      - uses: actions/upload-artifact@v2
+        with:
+          name: wasm.wasm
+          path: wasm.wasm
+      - uses: actions/upload-artifact@v2
+        with:
+          name: wasm.wasm.br
+          path: wasm.wasm.br
