@@ -45,8 +45,9 @@ func decodeMessageHeader(data []byte) (*messageHeader, *bytes.Reader, error) {
 type preKeyMessage struct {
 	selfConnectionID   [26]byte
 	remoteConnectionID [26]byte
-	identityKey        [32]byte
-	ephemeralKey       [32]byte
+	// ここで渡す identityKey は ed25519
+	identityKey  [32]byte
+	ephemeralKey x25519PublicKey
 }
 
 func decodePreKeyMessage(header messageHeader, buf *bytes.Reader) (*preKeyMessage, error) {
@@ -84,7 +85,7 @@ func decodePreKeyMessage(header messageHeader, buf *bytes.Reader) (*preKeyMessag
 type cipherMessage struct {
 	selfConnectionID   [26]byte
 	remoteConnectionID [26]byte
-	ratchetKey         [32]byte
+	ratchetKey         x25519PublicKey
 	PN                 uint32
 	N                  uint32
 	ciphertext         []byte

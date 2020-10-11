@@ -16,7 +16,7 @@ import (
 // TODO(v): oneTimePreKey に対応する
 type preKeyBundle struct {
 	identityKey     []byte
-	signedPreKey    [32]byte
+	signedPreKey    x25519PublicKey
 	preKeySignature []byte
 }
 
@@ -39,8 +39,8 @@ func rootKey(dh1 [32]byte, dh2 [32]byte, dh3 [32]byte) ([]byte, error) {
 }
 
 // remote 関連は remotePreKeyBundle struct で管理したい
-func senderRootKey(selfX25519IdentityPrivateKey [32]byte, selfEphemeralPrivateKey [32]byte,
-	remoteX25519IdentityKey [32]byte, remoteSignedPreKey [32]byte) ([]byte, error) {
+func senderRootKey(selfX25519IdentityPrivateKey x25519PrivateKey, selfEphemeralPrivateKey x25519PrivateKey,
+	remoteX25519IdentityKey x25519PublicKey, remoteSignedPreKey x25519PublicKey) ([]byte, error) {
 	// TODO(v): OneTimePreKey dh4 にも対応する
 	dh1 := dh(selfX25519IdentityPrivateKey, remoteSignedPreKey)
 	dh2 := dh(selfEphemeralPrivateKey, remoteX25519IdentityKey)
@@ -49,8 +49,8 @@ func senderRootKey(selfX25519IdentityPrivateKey [32]byte, selfEphemeralPrivateKe
 	return rootKey(dh1, dh2, dh3)
 }
 
-func receiverRootKey(selfIdentityPrivateKey [32]byte, selfPrePrivateKey [32]byte,
-	remoteX25519IdentityKey [32]byte, remoteEphemeralKey [32]byte) ([]byte, error) {
+func receiverRootKey(selfIdentityPrivateKey x25519PrivateKey, selfPrePrivateKey x25519PrivateKey,
+	remoteX25519IdentityKey x25519PublicKey, remoteEphemeralKey x25519PublicKey) ([]byte, error) {
 	// TODO(v): OneTimePreKey dh4 にも対応する
 	dh1 := dh(selfPrePrivateKey, remoteX25519IdentityKey)
 	dh2 := dh(selfIdentityPrivateKey, remoteEphemeralKey)
@@ -68,8 +68,8 @@ func secret(dh1 [32]byte, dh2 [32]byte, dh3 [32]byte) []byte {
 }
 
 type ephemeralKeyPair struct {
-	privateKey [32]byte
-	publicKey  [32]byte
+	privateKey x25519PrivateKey
+	publicKey  x25519PublicKey
 }
 
 func generateIdentityKeyPair() (*ed25519KeyPair, error) {

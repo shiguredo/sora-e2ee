@@ -25,9 +25,9 @@ type session struct {
 	remoteSecretKeyMaterial []byte
 
 	remoteIdentityKey           []byte
-	remoteSignedPreKey          [32]byte
+	remoteSignedPreKey          x25519PublicKey
 	remoteSignedPreKeySignature []byte
-	remoteEphemeralKey          [32]byte
+	remoteEphemeralKey          x25519PublicKey
 
 	// X3DH の戻り値
 	rootKey []byte
@@ -38,7 +38,7 @@ type session struct {
 	ratchetState *ratchetState
 }
 
-func (s *session) x25519RemoteIdentityKey() ([32]byte, error) {
+func (s *session) x25519RemoteIdentityKey() (x25519PublicKey, error) {
 	return publicEd25519KeyToCurve25519(s.remoteIdentityKey)
 }
 
