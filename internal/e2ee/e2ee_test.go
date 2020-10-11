@@ -10,10 +10,12 @@ func TestE2EE(t *testing.T) {
 	aliceConnectionID := "ALICE---------------------"
 	bobConnectionID := "BOB-----------------------"
 
-	alice, _ := initE2EE()
+	alice, err := initE2EE()
+	assert.Nil(t, err)
 	assert.Equal(t, len(alice.secretKeyMaterial), 32)
 
-	bob, _ := initE2EE()
+	bob, err := initE2EE()
+	assert.Nil(t, err)
 	assert.Equal(t, len(bob.secretKeyMaterial), 32)
 
 	alice.init()
@@ -44,7 +46,8 @@ func TestE2EE(t *testing.T) {
 	_, ok := result.remoteSecretKeyMaterials[bobConnectionID]
 	assert.False(t, ok)
 
-	bob.addPreKeyBundle(aliceConnectionID, alice.selfPreKeyBundle)
+	err = bob.addPreKeyBundle(aliceConnectionID, alice.selfPreKeyBundle)
+	assert.Nil(t, err)
 	assert.NotEmpty(t, bob.remoteFingerprints())
 	assert.Equal(t, 1, len(bob.remoteFingerprints()))
 
@@ -90,8 +93,10 @@ func TestE2EE(t *testing.T) {
 	carol.init()
 	carol.start(carolConnectionID)
 
-	carol.addPreKeyBundle(aliceConnectionID, alice.selfPreKeyBundle)
-	carol.addPreKeyBundle(bobConnectionID, bob.selfPreKeyBundle)
+	err = carol.addPreKeyBundle(aliceConnectionID, alice.selfPreKeyBundle)
+	assert.Nil(t, err)
+	err = carol.addPreKeyBundle(bobConnectionID, bob.selfPreKeyBundle)
+	assert.Nil(t, err)
 	assert.Equal(t, 2, len(carol.remoteFingerprints()))
 
 	r3, err := alice.startSession(carolConnectionID, carol.selfPreKeyBundle)
