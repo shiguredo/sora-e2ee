@@ -26,3 +26,7 @@ jobs:
         uses: rtCamp/action-slack-notify@v2.1.0
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+      - uses: actions/upload-artifact@v2
+        with:
+          name: wasm.wasm
+          path: wasm.wasm
