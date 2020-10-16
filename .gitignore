@@ -1,2 +1,4 @@
 sora-e2ee-wasm
 *.wasm*
+coverage.out
+coverage.html
