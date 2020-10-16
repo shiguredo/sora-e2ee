@@ -1,4 +1,4 @@
-# Sora E2EE WebAssembly ライブラリ
+# Sora E2EE Go ライブラリ
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
@@ -13,7 +13,7 @@ WebRTC SFU Sora 利用時に E2EE をブラウザで実現するためのライ�
 
 ## 注意
 
-Sora E2EE WebAssmbly ライブラリは現時点で実験的機能として提供しています。
+Sora E2EE Go ライブラリは現時点で実験的機能として提供しています。
 
 
 ## ドキュメント
