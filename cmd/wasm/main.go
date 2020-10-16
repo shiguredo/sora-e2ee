@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/shiguredo/sora-e2ee-wasm/internal/e2ee"
+	"github.com/shiguredo/sora-e2ee-go/internal/e2ee"
 )
 
 func main() {
