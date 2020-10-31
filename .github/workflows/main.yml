@@ -9,7 +9,7 @@ on:
   pull_request:
 
 jobs:
-  make-github:
+  main:
     runs-on: ubuntu-latest
     steps:
       - name: set up
