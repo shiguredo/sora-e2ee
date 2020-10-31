@@ -1,0 +1,42 @@
+name: make-github-workflow
+
+on:
+  push:
+    paths-ignore:
+    - '**.md'
+    - '**.html'
+    - '**.js'
+  pull_request:
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - name: set up
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.15
+        id: go
+      - uses: actions/checkout@v2
+      - run: make
+      - run: make test
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          file: ./coverage.out
+      - run: sudo apt install brotli
+      - run: make brotli
+      - run: go env
+      - name: Slack Notification
+        if: failure()
+        uses: rtCamp/action-slack-notify@v2.1.0
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+      - uses: actions/upload-artifact@v2
+        with:
+          name: wasm.wasm
+          path: wasm.wasm
+      - uses: actions/upload-artifact@v2
+        with:
+          name: wasm.wasm.br
+          path: wasm.wasm.br
