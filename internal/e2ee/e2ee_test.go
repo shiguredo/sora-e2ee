@@ -6,6 +6,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestE2EEVersion(t *testing.T) {
+	alice, err := initE2EE()
+	assert.Nil(t, err)
+	assert.NotNil(t, alice.version())
+}
+
 func TestE2EE(t *testing.T) {
 	aliceConnectionID := "ALICE---------------------"
 	bobConnectionID := "BOB-----------------------"
