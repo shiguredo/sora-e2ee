@@ -24,6 +24,14 @@ type e2ee struct {
 	sessions            map[string]session
 }
 
+var (
+	version = "2020.2.0"
+)
+
+func (e *e2ee) version() string {
+	return version
+}
+
 func (e *e2ee) selfFingerprint() string {
 	return fingerprint(e.identityKeyPair.publicKey)
 }

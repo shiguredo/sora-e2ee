@@ -49,6 +49,7 @@ func RegisterCallbacks() {
 	js.Global().Set("e2ee", js.ValueOf(
 		map[string]interface{}{
 			"init":               js.FuncOf(s.wasmInitE2EE),
+			"version":            js.FuncOf(s.wasmVersion),
 			"start":              js.FuncOf(s.wasmStartE2EE),
 			"startSession":       js.FuncOf(s.wasmStartSession),
 			"stopSession":        js.FuncOf(s.wasmStopSession),
@@ -58,6 +59,10 @@ func RegisterCallbacks() {
 			"remoteFingerprints": js.FuncOf(s.wasmRemoteFingerprints),
 		},
 	))
+}
+
+func (e *e2ee) wasmVersion(this js.Value, args []js.Value) interface{} {
+	return e.version()
 }
 
 func (e *e2ee) wasmInitE2EE(this js.Value, args []js.Value) interface{} {
