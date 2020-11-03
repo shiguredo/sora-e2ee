@@ -6,4 +6,4 @@ test:
 	go tool cover -html=coverage.out -o coverage.html
 
 brotli:
-	brotli wasm.wasm
+	brotli dist/wasm.wasm -o dist/wasm.wasm.br

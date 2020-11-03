@@ -35,8 +35,8 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: wasm.wasm
-          path: wasm.wasm
+          path: dist/wasm.wasm
       - uses: actions/upload-artifact@v2
         with:
           name: wasm.wasm.br
-          path: wasm.wasm.br
+          path: dist/wasm.wasm.br
