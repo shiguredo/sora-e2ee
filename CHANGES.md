@@ -11,5 +11,12 @@
 
 ## develop
 
+- [ADD] e2ee.version() を追加
+    - "2020.2" などの文字列を返す
+- [ADD] バイナリを dist 以下に置くようにする
+- [ADD] dist/wasm.wasm.sha512sum にチェックサムファイルを吐き出す仕組みを追加
+    - netlify での利用を想定
 
 ## 2020.1
+
+**祝リリース**
