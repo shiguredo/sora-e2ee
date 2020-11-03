@@ -1,3 +1,23 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:c6f9dc6b2ef58adf79e018efa5daef5ca4d0d1a7f92bb966ddd40142605a4a64
-size 423
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<script src="wasm_exec.js"></script>
+	<script>
+		const go = new Go();
+		WebAssembly.instantiateStreaming(fetch("wasm.wasm"), go.importObject)
+		.then((result) => {
+			go.run(result.instance);
+		})
+		.then(() => {
+			let version = document.getElementById("version") ;
+			version.innerHTML = e2ee.version();
+		})
+	</script>
+</head>
+
+<body>
+	<div id="version"></div>
+</body>
+
+</html>
