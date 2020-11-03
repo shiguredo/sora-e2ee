@@ -25,7 +25,7 @@ type e2ee struct {
 }
 
 var (
-	version = "2020.2.0"
+	version = "2020.2"
 )
 
 func (e *e2ee) version() string {
