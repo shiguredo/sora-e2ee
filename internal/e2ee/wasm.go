@@ -40,8 +40,8 @@ const (
 )
 
 // RegisterCallbacks ...
-func RegisterCallbacks() {
-	s, err := initE2EE()
+func RegisterCallbacks(version string) {
+	s, err := initE2EE(version)
 	if err != nil {
 		// TODO(v): ここはどうするか考える
 		panic(err)
@@ -62,7 +62,7 @@ func RegisterCallbacks() {
 }
 
 func (e *e2ee) wasmVersion(this js.Value, args []js.Value) interface{} {
-	return e.version()
+	return e.getVersion()
 }
 
 func (e *e2ee) wasmInitE2EE(this js.Value, args []js.Value) interface{} {

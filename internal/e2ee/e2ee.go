@@ -9,6 +9,9 @@ import (
 )
 
 type e2ee struct {
+	// このライブラリのバージョン
+	version string
+
 	// 自分
 	keyID             uint32
 	secretKeyMaterial []byte
@@ -24,12 +27,8 @@ type e2ee struct {
 	sessions            map[string]session
 }
 
-var (
-	version = "2020.2"
-)
-
-func (e *e2ee) version() string {
-	return version
+func (e *e2ee) getVersion() string {
+	return e.version
 }
 
 func (e *e2ee) selfFingerprint() string {
@@ -54,7 +53,7 @@ func generateSecretKeyMaterial() ([]byte, error) {
 	return b, nil
 }
 
-func initE2EE() (*e2ee, error) {
+func initE2EE(version string) (*e2ee, error) {
 	secretKeyMaterial, err := generateSecretKeyMaterial()
 	if err != nil {
 		return nil, err
@@ -72,6 +71,7 @@ func initE2EE() (*e2ee, error) {
 	selfPreKeyBundle := generatePreKeyBundle(*identityKeyPair, *preKeyPair)
 
 	return &e2ee{
+		version:           version,
 		keyID:             0,
 		secretKeyMaterial: secretKeyMaterial,
 		identityKeyPair:   *identityKeyPair,

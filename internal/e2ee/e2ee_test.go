@@ -6,21 +6,23 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+var version = "test"
+
 func TestE2EEVersion(t *testing.T) {
-	alice, err := initE2EE()
+	alice, err := initE2EE(version)
 	assert.Nil(t, err)
-	assert.NotNil(t, alice.version())
+	assert.NotNil(t, alice.getVersion())
 }
 
 func TestE2EE(t *testing.T) {
 	aliceConnectionID := "ALICE---------------------"
 	bobConnectionID := "BOB-----------------------"
 
-	alice, err := initE2EE()
+	alice, err := initE2EE(version)
 	assert.Nil(t, err)
 	assert.Equal(t, len(alice.secretKeyMaterial), 32)
 
-	bob, err := initE2EE()
+	bob, err := initE2EE(version)
 	assert.Nil(t, err)
 	assert.Equal(t, len(bob.secretKeyMaterial), 32)
 
@@ -95,7 +97,7 @@ func TestE2EE(t *testing.T) {
 	// Carol を登場させる
 	carolConnectionID := "CAROL---------------------"
 
-	carol, _ := initE2EE()
+	carol, _ := initE2EE(version)
 	carol.init()
 	carol.start(carolConnectionID)
 
