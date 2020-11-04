@@ -16,6 +16,7 @@
 - [ADD] バイナリを dist 以下に置くようにする
 - [ADD] dist/wasm.wasm.sha512sum にチェックサムファイルを吐き出す仕組みを追加
     - netlify での利用を想定
+- [ADD] dist/wasm.wasm を Git LFS で管理するようにする
 
 ## 2020.1
 
