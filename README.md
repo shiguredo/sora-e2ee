@@ -88,9 +88,8 @@ https://sora-e2ee.shiguredo.jp/
 
 ```javascript
 let sora = Sora.connection('wss://example.com/signaling');
-let channelId = 'shiguredo@sora-labo';
-let metadata = {'signaling_key': 'VBmHJ75tjP_NPpHPDwDHfuf84LtNtOx0-ElOZ0qlU7xQ0QtV'};
-let sendrecv = sora.sendrecv(channelId, metadata, {e2ee: true, e2ee_wasm_url: "https://example.com/e2ee/wasm.wasm"});
+let channelId = 'sora-e2ee';
+let sendrecv = sora.sendrecv(channelId, null, {e2ee: true, e2ee_wasm_url: "https://example.com/e2ee/wasm.wasm"});
 
 navigator.mediaDevices.getUserMedia({audio: true, video: true})
   .then(mediaStream => {
