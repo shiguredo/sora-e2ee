@@ -1,4 +1,4 @@
-module github.com/shiguredo/sora-e2ee-go
+module github.com/shiguredo/sora-e2ee
 
 go 1.15
 

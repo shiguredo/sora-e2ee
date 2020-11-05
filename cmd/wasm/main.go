@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/shiguredo/sora-e2ee-go/internal/e2ee"
+	"github.com/shiguredo/sora-e2ee/internal/e2ee"
 )
 
 // Version は Makefile 側で flag を利用して設定する
