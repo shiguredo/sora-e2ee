@@ -53,39 +53,32 @@ func generateSecretKeyMaterial() ([]byte, error) {
 	return b, nil
 }
 
-func initE2EE(version string) (*e2ee, error) {
+func (e *e2ee) init() error {
 	secretKeyMaterial, err := generateSecretKeyMaterial()
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	identityKeyPair, err := generateEd25519KeyPair()
 	if err != nil {
-		return nil, err
+		return err
 	}
 	preKeyPair, err := generateX25519KeyPair()
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	selfPreKeyBundle := generatePreKeyBundle(*identityKeyPair, *preKeyPair)
 
-	return &e2ee{
-		version:           version,
-		keyID:             0,
-		secretKeyMaterial: secretKeyMaterial,
-		identityKeyPair:   *identityKeyPair,
-		preKeyPair:        *preKeyPair,
+	e.keyID = 0
+	e.secretKeyMaterial = secretKeyMaterial
+	e.identityKeyPair = *identityKeyPair
+	e.preKeyPair = *preKeyPair
+	e.selfPreKeyBundle = *selfPreKeyBundle
+	e.remotePreKeyBundles = make(map[string]preKeyBundle)
+	e.sessions = make(map[string]session)
 
-		selfPreKeyBundle: *selfPreKeyBundle,
-
-		remotePreKeyBundles: make(map[string]preKeyBundle),
-		sessions:            make(map[string]session),
-	}, nil
-}
-
-func (e *e2ee) init() preKeyBundle {
-	return e.selfPreKeyBundle
+	return nil
 }
 
 func (e *e2ee) start(selfConnectionID string) []byte {
