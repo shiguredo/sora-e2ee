@@ -6,26 +6,33 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestE2EE(t *testing.T) {
-	aliceConnectionID := "ALICE---------------------"
-	bobConnectionID := "BOB-----------------------"
+var version = "test"
 
-	alice, err := initE2EE()
-	assert.Nil(t, err)
+func TestE2EEVersion(t *testing.T) {
+	alice := newE2EE(version)
+	assert.NotNil(t, alice.getVersion())
+}
+
+func TestE2EE(t *testing.T) {
+	version := "dev"
+
+	aliceConnectionID := "ALICE---------------------"
+
+	alice := newE2EE(version)
+	alice.init()
 	assert.Equal(t, len(alice.secretKeyMaterial), 32)
 
-	bob, err := initE2EE()
-	assert.Nil(t, err)
-	assert.Equal(t, len(bob.secretKeyMaterial), 32)
-
-	alice.init()
 	alice.start(aliceConnectionID)
 	// 最初なので 0
 	assert.Equal(t, uint32(0), alice.keyID)
 	assert.NotNil(t, alice.selfFingerprint())
 	assert.Empty(t, alice.remoteFingerprints())
 
+	bobConnectionID := "BOB-----------------------"
+
+	bob := newE2EE(version)
 	bob.init()
+	assert.Equal(t, len(bob.secretKeyMaterial), 32)
 	bob.start(bobConnectionID)
 	// 最初なので 0
 	assert.Equal(t, uint32(0), bob.keyID)
@@ -89,7 +96,7 @@ func TestE2EE(t *testing.T) {
 	// Carol を登場させる
 	carolConnectionID := "CAROL---------------------"
 
-	carol, _ := initE2EE()
+	carol := newE2EE(version)
 	carol.init()
 	carol.start(carolConnectionID)
 
