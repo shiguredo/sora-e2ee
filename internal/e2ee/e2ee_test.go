@@ -9,7 +9,7 @@ import (
 var version = "test"
 
 func TestE2EEVersion(t *testing.T) {
-	alice := &e2ee{version: version}
+	alice := newE2EE(version)
 	assert.NotNil(t, alice.getVersion())
 }
 
@@ -18,7 +18,7 @@ func TestE2EE(t *testing.T) {
 
 	aliceConnectionID := "ALICE---------------------"
 
-	alice := &e2ee{version: version}
+	alice := newE2EE(version)
 	alice.init()
 	assert.Equal(t, len(alice.secretKeyMaterial), 32)
 
@@ -30,7 +30,7 @@ func TestE2EE(t *testing.T) {
 
 	bobConnectionID := "BOB-----------------------"
 
-	bob := &e2ee{version: version}
+	bob := newE2EE(version)
 	bob.init()
 	assert.Equal(t, len(bob.secretKeyMaterial), 32)
 	bob.start(bobConnectionID)
@@ -96,7 +96,7 @@ func TestE2EE(t *testing.T) {
 	// Carol を登場させる
 	carolConnectionID := "CAROL---------------------"
 
-	carol := &e2ee{version: version}
+	carol := newE2EE(version)
 	carol.init()
 	carol.start(carolConnectionID)
 
