@@ -72,9 +72,13 @@ func (e *e2ee) init() error {
 
 	e.keyID = 0
 	e.secretKeyMaterial = secretKeyMaterial
+	e.connectionID = ""
+
 	e.identityKeyPair = *identityKeyPair
 	e.preKeyPair = *preKeyPair
+
 	e.selfPreKeyBundle = *selfPreKeyBundle
+
 	e.remotePreKeyBundles = make(map[string]preKeyBundle)
 	e.sessions = make(map[string]session)
 
