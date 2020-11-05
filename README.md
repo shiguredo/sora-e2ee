@@ -42,7 +42,7 @@ https://sora-e2ee.shiguredo.jp/
     - 送られません Sora には `{e2ee: true}` という値のみが Sora に送られます
     - この値は E2EE を利用しているかどうかを認証サーバ側で把握するために利用されます
 - E2EE 用の wasm バイナリはどう用意すればいいですか？
-    - https://github.com/shiguredo/sora-e2ee-go からダウンロードするか、自前でビルドしてください
+    - 自前でビルドしてください Go が必要になります
     - その後 Sora JavaScript SDK で `{e2ee_wasm_url: "https://example.com/wasm.wasm"}` のように設定してください
 - E2EE で利用するキーの利用回数が 2^32-1 回を超えたらどうなりますか？
     - 切断します
