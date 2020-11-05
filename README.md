@@ -1,6 +1,6 @@
 # Sora E2EE Go ライブラリ
 
-[![GitHub tag](https://img.shields.io/github/tag/shiguredo/sora-e2ee-go.svg)](https://github.com/shiguredo/sora-e2ee-go)
+[![GitHub tag](https://img.shields.io/github/tag/shiguredo/sora-e2ee.svg)](https://github.com/shiguredo/sora-e2ee)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 ## 時雨堂のオープンソースソフトウェアについて
