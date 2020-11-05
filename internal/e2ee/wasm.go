@@ -48,8 +48,8 @@ func RegisterCallbacks(version string) {
 	}
 	js.Global().Set("e2ee", js.ValueOf(
 		map[string]interface{}{
-			"init":               js.FuncOf(s.wasmInitE2EE),
 			"version":            js.FuncOf(s.wasmVersion),
+			"init":               js.FuncOf(s.wasmInitE2EE),
 			"start":              js.FuncOf(s.wasmStartE2EE),
 			"startSession":       js.FuncOf(s.wasmStartSession),
 			"stopSession":        js.FuncOf(s.wasmStopSession),
