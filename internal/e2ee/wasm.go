@@ -41,7 +41,7 @@ const (
 
 // RegisterCallbacks ...
 func RegisterCallbacks(version string) {
-	e := &e2ee{version: version}
+	e := newE2EE(version)
 	js.Global().Set("e2ee", js.ValueOf(
 		map[string]interface{}{
 			"version":            js.FuncOf(e.wasmVersion),

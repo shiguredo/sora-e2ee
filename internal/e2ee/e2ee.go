@@ -27,6 +27,10 @@ type e2ee struct {
 	sessions            map[string]session
 }
 
+func newE2EE(version string) *e2ee {
+	return &e2ee{version: version}
+}
+
 func (e *e2ee) getVersion() string {
 	return e.version
 }
