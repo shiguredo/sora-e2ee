@@ -41,22 +41,18 @@ const (
 
 // RegisterCallbacks ...
 func RegisterCallbacks(version string) {
-	s, err := initE2EE(version)
-	if err != nil {
-		// TODO(v): ここはどうするか考える
-		panic(err)
-	}
+	e := newE2EE(version)
 	js.Global().Set("e2ee", js.ValueOf(
 		map[string]interface{}{
-			"version":            js.FuncOf(s.wasmVersion),
-			"init":               js.FuncOf(s.wasmInitE2EE),
-			"start":              js.FuncOf(s.wasmStartE2EE),
-			"startSession":       js.FuncOf(s.wasmStartSession),
-			"stopSession":        js.FuncOf(s.wasmStopSession),
-			"receiveMessage":     js.FuncOf(s.wasmReceiveMessage),
-			"addPreKeyBundle":    js.FuncOf(s.wasmAddPreKeyBundle),
-			"selfFingerprint":    js.FuncOf(s.wasmSelfFingerprint),
-			"remoteFingerprints": js.FuncOf(s.wasmRemoteFingerprints),
+			"version":            js.FuncOf(e.wasmVersion),
+			"init":               js.FuncOf(e.wasmInitE2EE),
+			"start":              js.FuncOf(e.wasmStartE2EE),
+			"startSession":       js.FuncOf(e.wasmStartSession),
+			"stopSession":        js.FuncOf(e.wasmStopSession),
+			"receiveMessage":     js.FuncOf(e.wasmReceiveMessage),
+			"addPreKeyBundle":    js.FuncOf(e.wasmAddPreKeyBundle),
+			"selfFingerprint":    js.FuncOf(e.wasmSelfFingerprint),
+			"remoteFingerprints": js.FuncOf(e.wasmRemoteFingerprints),
 		},
 	))
 }
@@ -66,9 +62,12 @@ func (e *e2ee) wasmVersion(this js.Value, args []js.Value) interface{} {
 }
 
 func (e *e2ee) wasmInitE2EE(this js.Value, args []js.Value) interface{} {
-	selfPreKeyBundle := e.init()
+	if err := e.init(); err != nil {
+		// TODO(v): エラーメッセージを考える
+		return toJsReturnValue(nil, jsError(errors.New("InitError")))
+	}
 	return map[string]interface{}{
-		"preKeyBundle": selfPreKeyBundle.toJsValue(),
+		"preKeyBundle": e.selfPreKeyBundle.toJsValue(),
 	}
 }
 
