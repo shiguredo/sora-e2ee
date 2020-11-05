@@ -11,12 +11,11 @@
 
 ## develop
 
+- [CHANGE] e2ee を利用し始める時は e2ee.init() を必ず呼ぶように変更する
+    - これで再読み込みなども不要にできるようになる
 - [ADD] e2ee.version() を追加
     - "2020.2" などの文字列を返す
 - [ADD] バイナリを dist 以下に置くようにする
-- [ADD] dist/wasm.wasm.sha512sum にチェックサムファイルを吐き出す仕組みを追加
-    - netlify での利用を想定
-- [ADD] dist/wasm.wasm を Git LFS で管理するようにする
 
 ## 2020.1
 
