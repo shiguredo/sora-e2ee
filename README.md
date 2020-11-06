@@ -1,4 +1,4 @@
-# Sora E2EE Go ライブラリ
+# Sora E2EE ライブラリ
 
 [![GitHub tag](https://img.shields.io/github/tag/shiguredo/sora-e2ee.svg)](https://github.com/shiguredo/sora-e2ee)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
@@ -11,6 +11,8 @@
 
 WebRTC SFU Sora 利用時に E2EE をブラウザで実現するためのライブラリです。
 これ単体では利用できず [Sora JS SDK](https://github.com/shiguredo/sora-js-sdk) から呼び出して利用します。
+
+WebAssembly (Wasm) として利用することを想定して実装されています。
 
 ## ドキュメント
 
