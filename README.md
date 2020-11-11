@@ -97,7 +97,6 @@ https://sora-e2ee.shiguredo.jp/
 
 ```javascript
 // E2EE 用 Wasm 読み込み
-
 Sora.initE2EE("https://example.com/wasm.wasm");
 // Sora.initE2EE("wasm.wasm"); でも良い
 
