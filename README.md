@@ -19,7 +19,7 @@ WebAssembly (Wasm) として利用することを想定して実装されてい�
 Go バージョン 1.15 以降が必要になります。
 
 `make` を実行すれば `dist/` 以下に `wasm.wasm` が生成されます。
-この `wasm.wasm` を `sora-js-sdk` の `e2ee_wasm_url` に指定してください。
+この `wasm.wasm` を `sora-js-sdk` の `Sora.initE2EE(...)` に指定してください。
 
 ## ドキュメント
 
@@ -96,9 +96,12 @@ https://sora-e2ee.shiguredo.jp/
 ## Sora JavaScript SDK からの利用方法
 
 ```javascript
+// E2EE 用 Wasm 読み込み
+Sora.initE2EE("https://example.com/wasm.wasm");
+
 let sora = Sora.connection('wss://example.com/signaling');
 let channelId = 'sora-e2ee';
-let sendrecv = sora.sendrecv(channelId, null, {e2ee: true, e2ee_wasm_url: "https://example.com/e2ee/wasm.wasm"});
+let sendrecv = sora.sendrecv(channelId, null, {e2ee: true});
 
 navigator.mediaDevices.getUserMedia({audio: true, video: true})
   .then(mediaStream => {
