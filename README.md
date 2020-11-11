@@ -52,7 +52,7 @@ https://sora-e2ee.shiguredo.jp/
     - この値は E2EE を利用しているかどうかを認証サーバ側で把握するために利用されます
 - E2EE 用の wasm バイナリはどう用意すればいいですか？
     - 自前でビルドしてください Go が必要になります
-    - その後 Sora JavaScript SDK で `{e2ee_wasm_url: "https://example.com/wasm.wasm"}` のように設定してください
+    - その後 Sora JavaScript SDK で `Sora.initE2EE("wasm.wasm")` のように初期化して下さい
 - E2EE で利用するキーの利用回数が 2^32-1 回を超えたらどうなりますか？
     - 切断します
 - E2EE はどうやって実現していますか？
@@ -97,7 +97,9 @@ https://sora-e2ee.shiguredo.jp/
 
 ```javascript
 // E2EE 用 Wasm 読み込み
+
 Sora.initE2EE("https://example.com/wasm.wasm");
+// Sora.initE2EE("wasm.wasm"); でも良い
 
 let sora = Sora.connection('wss://example.com/signaling');
 let channelId = 'sora-e2ee';
