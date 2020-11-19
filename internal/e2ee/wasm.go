@@ -41,20 +41,24 @@ const (
 
 // RegisterCallbacks ...
 func RegisterCallbacks(version string) {
-	e := newE2EE(version)
-	js.Global().Set("e2ee", js.ValueOf(
-		map[string]interface{}{
-			"version":            js.FuncOf(e.wasmVersion),
-			"init":               js.FuncOf(e.wasmInitE2EE),
-			"start":              js.FuncOf(e.wasmStartE2EE),
-			"startSession":       js.FuncOf(e.wasmStartSession),
-			"stopSession":        js.FuncOf(e.wasmStopSession),
-			"receiveMessage":     js.FuncOf(e.wasmReceiveMessage),
-			"addPreKeyBundle":    js.FuncOf(e.wasmAddPreKeyBundle),
-			"selfFingerprint":    js.FuncOf(e.wasmSelfFingerprint),
-			"remoteFingerprints": js.FuncOf(e.wasmRemoteFingerprints),
-		},
-	))
+	js.Global().Set("E2EE", js.FuncOf(func(this js.Value, args []js.Value) interface{} {
+		e := newE2EE(version)
+		this.Set("version", js.FuncOf(e.wasmVersion))
+		this.Set("init", js.FuncOf(e.wasmInitE2EE))
+		this.Set("start", js.FuncOf(e.wasmStartE2EE))
+		this.Set("startSession", js.FuncOf(e.wasmStartSession))
+		this.Set("stopSession", js.FuncOf(e.wasmStopSession))
+		this.Set("receiveMessage", js.FuncOf(e.wasmReceiveMessage))
+		this.Set("addPreKeyBundle", js.FuncOf(e.wasmAddPreKeyBundle))
+		this.Set("selfFingerprint", js.FuncOf(e.wasmSelfFingerprint))
+		this.Set("remoteFingerprints", js.FuncOf(e.wasmRemoteFingerprints))
+		return js.Undefined()
+	}))
+
+	js.Global().Get("E2EE").Set("version", js.FuncOf(func(this js.Value, args []js.Value) interface{} {
+		return version
+	}))
+
 }
 
 func (e *e2ee) wasmVersion(this js.Value, args []js.Value) interface{} {
