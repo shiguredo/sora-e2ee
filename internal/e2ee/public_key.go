@@ -99,7 +99,7 @@ func privateEd25519KeyToCurve25519(edSKey ed25519PrivateKey) x25519PrivateKey {
 	return curveKey
 }
 
-// https://github.com/golang/crypto/blob/5c72a883971a/ssh/keys.go#L1456
+// https://github.com/golang/crypto/blob/5c72a883971a/ssh/keys.go#L1454-L1474
 func fingerprint(pubKey []byte) string {
 	sha256sum := sha256.Sum256(pubKey)
 	hexarray := make([]string, len(sha256sum))
