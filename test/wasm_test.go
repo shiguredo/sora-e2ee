@@ -15,7 +15,12 @@ import (
 )
 
 const (
-	wasmPath = "wasm.wasm"
+	wasmExecPath = "wasm_exec.js"
+	wasmPath     = "wasm.wasm"
+
+	aliceConnectionID = "ALICE---------------------"
+	bobConnectionID   = "BOB-----------------------"
+	carolConnectionID = "CAROL---------------------"
 )
 
 func NewWasmServer(wasmPath string) *httptest.Server {
@@ -23,7 +28,7 @@ func NewWasmServer(wasmPath string) *httptest.Server {
 		if r.URL.String() == "/" {
 			html := fmt.Sprintf(`<html>
 	<head>
-		<script src="wasm_exec.js"></script>
+		<script src="%s"></script>
 		<script>
 			const go = new Go();
 			WebAssembly.instantiateStreaming(fetch("%s"), go.importObject)
@@ -34,7 +39,7 @@ func NewWasmServer(wasmPath string) *httptest.Server {
 			})
 		</script>
 	</head>
-</html>`, wasmPath)
+</html>`, wasmExecPath, wasmPath)
 			fmt.Fprintln(w, html)
 		} else {
 			// 静的ファイル
@@ -43,12 +48,6 @@ func NewWasmServer(wasmPath string) *httptest.Server {
 		}
 	}))
 }
-
-var (
-	aliceConnectionID = "ALICE---------------------"
-	bobConnectionID   = "BOB-----------------------"
-	carolConnectionID = "CAROL---------------------"
-)
 
 func TestWasm(t *testing.T) {
 	assert := assert.New(t)
