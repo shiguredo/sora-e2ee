@@ -12,6 +12,7 @@
 ## develop
 
 - [CHANGE] e2ee インスタンスを作成できるようにする
+- [ADD] wasm.wasm のテストを追加する
 
 ## 2020.2
 
