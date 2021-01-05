@@ -39,7 +39,7 @@ func TestE2EE(t *testing.T) {
 	assert.NotNil(t, bob.selfFingerprint())
 	assert.Empty(t, bob.remoteFingerprints())
 
-	result, err := alice.startSession(bobConnectionID, bob.selfPreKeyBundle)
+	result, err := alice.startSession(bobConnectionID, bob.selfPreKeyBundle.identityKey, bob.selfPreKeyBundle.signedPreKey[:], bob.selfPreKeyBundle.preKeySignature)
 	assert.Nil(t, err)
 	assert.NotEmpty(t, alice.remoteFingerprints())
 	assert.Equal(t, 1, len(alice.remoteFingerprints()))
@@ -106,7 +106,7 @@ func TestE2EE(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, 2, len(carol.remoteFingerprints()))
 
-	r3, err := alice.startSession(carolConnectionID, carol.selfPreKeyBundle)
+	r3, err := alice.startSession(carolConnectionID, carol.selfPreKeyBundle.identityKey, carol.selfPreKeyBundle.signedPreKey[:], carol.selfPreKeyBundle.preKeySignature)
 	assert.Nil(t, err)
 	assert.Equal(t, 2, len(alice.remoteFingerprints()))
 	assert.Equal(t, 2, len(r3.messages))
@@ -126,7 +126,7 @@ func TestE2EE(t *testing.T) {
 	// carol は新規参加者なので key は 0 のまま
 	assert.Equal(t, uint32(0), carol.keyID)
 
-	r6, err := bob.startSession(carolConnectionID, carol.selfPreKeyBundle)
+	r6, err := bob.startSession(carolConnectionID, carol.selfPreKeyBundle.identityKey, carol.selfPreKeyBundle.signedPreKey[:], carol.selfPreKeyBundle.preKeySignature)
 	assert.Nil(t, err)
 	assert.Equal(t, 2, len(bob.remoteFingerprints()))
 	assert.Equal(t, bobConnectionID, r6.selfConnectionID)

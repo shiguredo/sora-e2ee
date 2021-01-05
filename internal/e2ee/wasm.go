@@ -128,22 +128,7 @@ func (e *e2ee) wasmStartSession(this js.Value, args []js.Value) interface{} {
 		return toJsReturnValue(nil, jsError(err))
 	}
 
-	// ここじゃなくてもいい気はする
-	var copySignedPreKey [32]byte
-	copy(copySignedPreKey[:], signedPreKey)
-
-	ok := ed25519.Verify(identityKey, signedPreKey, preKeySignature)
-	if !ok {
-		return toJsReturnValue(nil, jsError(errors.New("VerifyFailedError")))
-	}
-
-	preKeyBundle := &preKeyBundle{
-		identityKey:     identityKey,
-		signedPreKey:    copySignedPreKey,
-		preKeySignature: preKeySignature,
-	}
-
-	result, err := e.startSession(remoteConnectionID, *preKeyBundle)
+	result, err := e.startSession(remoteConnectionID, identityKey, signedPreKey, preKeySignature)
 	if err != nil {
 		return toJsReturnValue(nil, jsError(err))
 	}

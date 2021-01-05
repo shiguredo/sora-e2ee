@@ -139,9 +139,23 @@ func (e *e2ee) messages() ([][]byte, error) {
 	return messages, nil
 }
 
-func (e *e2ee) startSession(remoteConnectionID string, preKeyBundle preKeyBundle) (*startSessionResult, error) {
+func (e *e2ee) startSession(remoteConnectionID string, identityKey, signedPreKey, preKeySignature []byte) (*startSessionResult, error) {
+	var copySignedPreKey [32]byte
+	copy(copySignedPreKey[:], signedPreKey)
+
+	ok := ed25519.Verify(identityKey, signedPreKey, preKeySignature)
+	if !ok {
+		return nil, errors.New("VerifyFailedError")
+	}
+
+	preKeyBundle := &preKeyBundle{
+		identityKey:     identityKey,
+		signedPreKey:    copySignedPreKey,
+		preKeySignature: preKeySignature,
+	}
+
 	// セッションがすでに無いかどうかの確認をする
-	_, ok := e.sessions[remoteConnectionID]
+	_, ok = e.sessions[remoteConnectionID]
 	if ok {
 		// すでにセッションがあるのに呼んでるのでエラーにする
 		// いい名前のエラーが必要
@@ -149,12 +163,12 @@ func (e *e2ee) startSession(remoteConnectionID string, preKeyBundle preKeyBundle
 	}
 
 	// すでに持っている preKeyBundle だったらエラーを返す
-	if err := e.addPreKeyBundle(remoteConnectionID, preKeyBundle); err != nil {
+	if err := e.addPreKeyBundle(remoteConnectionID, *preKeyBundle); err != nil {
 		return nil, err
 	}
 
 	// secretMaterialKey の更新が必要
-	session, err := e.initSession(remoteConnectionID, preKeyBundle)
+	session, err := e.initSession(remoteConnectionID, *preKeyBundle)
 	if err != nil {
 		return nil, err
 	}
@@ -164,7 +178,7 @@ func (e *e2ee) startSession(remoteConnectionID string, preKeyBundle preKeyBundle
 	if err := session.senderRootKey(); err != nil {
 		return nil, err
 	}
-	if err := session.senderRatchetInit(session.rootKey, preKeyBundle); err != nil {
+	if err := session.senderRatchetInit(session.rootKey, *preKeyBundle); err != nil {
 		return nil, err
 	}
 
