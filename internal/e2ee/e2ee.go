@@ -441,7 +441,7 @@ func (e *e2ee) cipherMessage(m cipherMessage) (*receiveMessageResult, error) {
 
 func (e *e2ee) initSession(remoteConnectionID string, preKeyBundle preKeyBundle) (*session, error) {
 	// ここで相手の公開鍵の verify を行う
-	ok := ed25519.Verify(preKeyBundle.identityKey, preKeyBundle.signedPreKey[:], preKeyBundle.preKeySignature[:])
+	ok := ed25519.Verify(preKeyBundle.identityKey, preKeyBundle.signedPreKey[:], preKeyBundle.preKeySignature)
 	if !ok {
 		return nil, errors.New("Ed25519VerifyError")
 	}
