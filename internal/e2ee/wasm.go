@@ -1,7 +1,6 @@
 package e2ee
 
 import (
-	"crypto/ed25519"
 	"encoding/base64"
 	"syscall/js"
 
@@ -186,22 +185,7 @@ func (e *e2ee) wasmAddPreKeyBundle(this js.Value, args []js.Value) interface{} {
 		return jsError(err)
 	}
 
-	// ここじゃなくてもいい気はする
-	var copySignedPreKey [32]byte
-	copy(copySignedPreKey[:], signedPreKey)
-
-	ok := ed25519.Verify(identityKey, signedPreKey, preKeySignature)
-	if !ok {
-		return jsError(errors.New("VerifyFailedError"))
-	}
-
-	preKeyBundle := &preKeyBundle{
-		identityKey:     identityKey,
-		signedPreKey:    copySignedPreKey,
-		preKeySignature: preKeySignature,
-	}
-
-	if err := e.addPreKeyBundle(remoteConnectionID, *preKeyBundle); err != nil {
+	if err := e.addPreKeyBundle(remoteConnectionID, identityKey, signedPreKey, preKeySignature); err != nil {
 		return jsError(err)
 	}
 

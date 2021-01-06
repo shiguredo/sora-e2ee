@@ -140,22 +140,8 @@ func (e *e2ee) messages() ([][]byte, error) {
 }
 
 func (e *e2ee) startSession(remoteConnectionID string, identityKey, signedPreKey, preKeySignature []byte) (*startSessionResult, error) {
-	var copySignedPreKey [32]byte
-	copy(copySignedPreKey[:], signedPreKey)
-
-	ok := ed25519.Verify(identityKey, signedPreKey, preKeySignature)
-	if !ok {
-		return nil, errors.New("VerifyFailedError")
-	}
-
-	preKeyBundle := &preKeyBundle{
-		identityKey:     identityKey,
-		signedPreKey:    copySignedPreKey,
-		preKeySignature: preKeySignature,
-	}
-
 	// セッションがすでに無いかどうかの確認をする
-	_, ok = e.sessions[remoteConnectionID]
+	_, ok := e.sessions[remoteConnectionID]
 	if ok {
 		// すでにセッションがあるのに呼んでるのでエラーにする
 		// いい名前のエラーが必要
@@ -163,8 +149,17 @@ func (e *e2ee) startSession(remoteConnectionID string, identityKey, signedPreKey
 	}
 
 	// すでに持っている preKeyBundle だったらエラーを返す
-	if err := e.addPreKeyBundle(remoteConnectionID, *preKeyBundle); err != nil {
+	if err := e.addPreKeyBundle(remoteConnectionID, identityKey, signedPreKey, preKeySignature); err != nil {
 		return nil, err
+	}
+
+	var copySignedPreKey [32]byte
+	copy(copySignedPreKey[:], signedPreKey)
+
+	preKeyBundle := &preKeyBundle{
+		identityKey:     identityKey,
+		signedPreKey:    copySignedPreKey,
+		preKeySignature: preKeySignature,
 	}
 
 	// secretMaterialKey の更新が必要
@@ -315,12 +310,26 @@ func (e *e2ee) receiveMessage(data []byte) (*receiveMessageResult, error) {
 	}
 }
 
-func (e *e2ee) addPreKeyBundle(connectionID string, preKeyBundle preKeyBundle) error {
-	_, ok := e.remotePreKeyBundles[connectionID]
+func (e *e2ee) addPreKeyBundle(connectionID string, identityKey, signedPreKey, preKeySignature []byte) error {
+	var copySignedPreKey [32]byte
+	copy(copySignedPreKey[:], signedPreKey)
+
+	ok := ed25519.Verify(identityKey, signedPreKey, preKeySignature)
+	if !ok {
+		return errors.New("VerifyFailedError")
+	}
+
+	preKeyBundle := &preKeyBundle{
+		identityKey:     identityKey,
+		signedPreKey:    copySignedPreKey,
+		preKeySignature: preKeySignature,
+	}
+
+	_, ok = e.remotePreKeyBundles[connectionID]
 	if ok {
 		return errors.New("AlreadyExistRemotePreKeyBundle")
 	}
-	e.remotePreKeyBundles[connectionID] = preKeyBundle
+	e.remotePreKeyBundles[connectionID] = *preKeyBundle
 	return nil
 }
 
