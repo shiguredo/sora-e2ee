@@ -39,8 +39,8 @@ func (e *e2ee) selfFingerprint() string {
 	return fingerprint(e.identityKeyPair.publicKey)
 }
 
-func (e *e2ee) remoteFingerprints() map[string]string {
-	remoteIdentityKeyFingerprints := make(map[string]string)
+func (e *e2ee) remoteFingerprints() map[string]interface{} {
+	remoteIdentityKeyFingerprints := make(map[string]interface{})
 	for remoteConnectionID, remotePreKeyBundle := range e.remotePreKeyBundles {
 		fingerprint := fingerprint(remotePreKeyBundle.identityKey)
 		remoteIdentityKeyFingerprints[remoteConnectionID] = fingerprint
