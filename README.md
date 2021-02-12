@@ -131,6 +131,7 @@ sendrecv.on('disconnect', function(e) {
 ## ライセンス
 
 ```
+Copyright 2020-2021, Hiroshi Yoshida （Original Author)
 Copyright 2020-2021, Shiguredo Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
