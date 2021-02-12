@@ -1,7 +1,6 @@
 package e2ee
 
 import (
-	"crypto/ed25519"
 	"encoding/base64"
 	"syscall/js"
 
@@ -128,22 +127,7 @@ func (e *e2ee) wasmStartSession(this js.Value, args []js.Value) interface{} {
 		return toJsReturnValue(nil, jsError(err))
 	}
 
-	// ここじゃなくてもいい気はする
-	var copySignedPreKey [32]byte
-	copy(copySignedPreKey[:], signedPreKey)
-
-	ok := ed25519.Verify(identityKey, signedPreKey, preKeySignature)
-	if !ok {
-		return toJsReturnValue(nil, jsError(errors.New("VerifyFailedError")))
-	}
-
-	preKeyBundle := &preKeyBundle{
-		identityKey:     identityKey,
-		signedPreKey:    copySignedPreKey,
-		preKeySignature: preKeySignature,
-	}
-
-	result, err := e.startSession(remoteConnectionID, *preKeyBundle)
+	result, err := e.startSession(remoteConnectionID, identityKey, signedPreKey, preKeySignature)
 	if err != nil {
 		return toJsReturnValue(nil, jsError(err))
 	}
@@ -201,22 +185,7 @@ func (e *e2ee) wasmAddPreKeyBundle(this js.Value, args []js.Value) interface{} {
 		return jsError(err)
 	}
 
-	// ここじゃなくてもいい気はする
-	var copySignedPreKey [32]byte
-	copy(copySignedPreKey[:], signedPreKey)
-
-	ok := ed25519.Verify(identityKey, signedPreKey, preKeySignature)
-	if !ok {
-		return jsError(errors.New("VerifyFailedError"))
-	}
-
-	preKeyBundle := &preKeyBundle{
-		identityKey:     identityKey,
-		signedPreKey:    copySignedPreKey,
-		preKeySignature: preKeySignature,
-	}
-
-	if err := e.addPreKeyBundle(remoteConnectionID, *preKeyBundle); err != nil {
+	if err := e.addPreKeyBundle(remoteConnectionID, identityKey, signedPreKey, preKeySignature); err != nil {
 		return jsError(err)
 	}
 
@@ -228,11 +197,7 @@ func (e *e2ee) wasmSelfFingerprint(this js.Value, args []js.Value) interface{} {
 }
 
 func (e *e2ee) wasmRemoteFingerprints(this js.Value, args []js.Value) interface{} {
-	remoteFingerprints := make(map[string]interface{})
-	for connectionID, fingerprint := range e.remoteFingerprints() {
-		remoteFingerprints[connectionID] = fingerprint
-	}
-	return remoteFingerprints
+	return e.remoteFingerprints()
 }
 
 func (r startSessionResult) toJsValue() map[string]interface{} {

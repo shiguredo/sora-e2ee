@@ -39,8 +39,8 @@ func (e *e2ee) selfFingerprint() string {
 	return fingerprint(e.identityKeyPair.publicKey)
 }
 
-func (e *e2ee) remoteFingerprints() map[string]string {
-	remoteIdentityKeyFingerprints := make(map[string]string)
+func (e *e2ee) remoteFingerprints() map[string]interface{} {
+	remoteIdentityKeyFingerprints := make(map[string]interface{})
 	for remoteConnectionID, remotePreKeyBundle := range e.remotePreKeyBundles {
 		fingerprint := fingerprint(remotePreKeyBundle.identityKey)
 		remoteIdentityKeyFingerprints[remoteConnectionID] = fingerprint
@@ -139,7 +139,7 @@ func (e *e2ee) messages() ([][]byte, error) {
 	return messages, nil
 }
 
-func (e *e2ee) startSession(remoteConnectionID string, preKeyBundle preKeyBundle) (*startSessionResult, error) {
+func (e *e2ee) startSession(remoteConnectionID string, identityKey, signedPreKey, preKeySignature []byte) (*startSessionResult, error) {
 	// セッションがすでに無いかどうかの確認をする
 	_, ok := e.sessions[remoteConnectionID]
 	if ok {
@@ -149,12 +149,21 @@ func (e *e2ee) startSession(remoteConnectionID string, preKeyBundle preKeyBundle
 	}
 
 	// すでに持っている preKeyBundle だったらエラーを返す
-	if err := e.addPreKeyBundle(remoteConnectionID, preKeyBundle); err != nil {
+	if err := e.addPreKeyBundle(remoteConnectionID, identityKey, signedPreKey, preKeySignature); err != nil {
 		return nil, err
 	}
 
+	var copySignedPreKey [32]byte
+	copy(copySignedPreKey[:], signedPreKey)
+
+	preKeyBundle := &preKeyBundle{
+		identityKey:     identityKey,
+		signedPreKey:    copySignedPreKey,
+		preKeySignature: preKeySignature,
+	}
+
 	// secretMaterialKey の更新が必要
-	session, err := e.initSession(remoteConnectionID, preKeyBundle)
+	session, err := e.initSession(remoteConnectionID, *preKeyBundle)
 	if err != nil {
 		return nil, err
 	}
@@ -164,7 +173,7 @@ func (e *e2ee) startSession(remoteConnectionID string, preKeyBundle preKeyBundle
 	if err := session.senderRootKey(); err != nil {
 		return nil, err
 	}
-	if err := session.senderRatchetInit(session.rootKey, preKeyBundle); err != nil {
+	if err := session.senderRatchetInit(session.rootKey, *preKeyBundle); err != nil {
 		return nil, err
 	}
 
@@ -301,12 +310,26 @@ func (e *e2ee) receiveMessage(data []byte) (*receiveMessageResult, error) {
 	}
 }
 
-func (e *e2ee) addPreKeyBundle(connectionID string, preKeyBundle preKeyBundle) error {
-	_, ok := e.remotePreKeyBundles[connectionID]
+func (e *e2ee) addPreKeyBundle(connectionID string, identityKey, signedPreKey, preKeySignature []byte) error {
+	var copySignedPreKey [32]byte
+	copy(copySignedPreKey[:], signedPreKey)
+
+	ok := ed25519.Verify(identityKey, signedPreKey, preKeySignature)
+	if !ok {
+		return errors.New("VerifyFailedError")
+	}
+
+	preKeyBundle := &preKeyBundle{
+		identityKey:     identityKey,
+		signedPreKey:    copySignedPreKey,
+		preKeySignature: preKeySignature,
+	}
+
+	_, ok = e.remotePreKeyBundles[connectionID]
 	if ok {
 		return errors.New("AlreadyExistRemotePreKeyBundle")
 	}
-	e.remotePreKeyBundles[connectionID] = preKeyBundle
+	e.remotePreKeyBundles[connectionID] = *preKeyBundle
 	return nil
 }
 
@@ -418,7 +441,7 @@ func (e *e2ee) cipherMessage(m cipherMessage) (*receiveMessageResult, error) {
 
 func (e *e2ee) initSession(remoteConnectionID string, preKeyBundle preKeyBundle) (*session, error) {
 	// ここで相手の公開鍵の verify を行う
-	ok := ed25519.Verify(preKeyBundle.identityKey, preKeyBundle.signedPreKey[:], preKeyBundle.preKeySignature[:])
+	ok := ed25519.Verify(preKeyBundle.identityKey, preKeyBundle.signedPreKey[:], preKeyBundle.preKeySignature)
 	if !ok {
 		return nil, errors.New("Ed25519VerifyError")
 	}
