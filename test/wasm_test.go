@@ -77,7 +77,7 @@ func TestWasm(t *testing.T) {
 	// TODO: 型の確認
 
 	r := run(ctx, "version = E2EE.version()")
-	assert.Equal("2020.2", r)
+	assert.Equal("2021.1", r)
 
 	r1 := run(ctx, "alice = new E2EE()")
 	assert.NotNil(r1)
