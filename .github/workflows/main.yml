@@ -15,7 +15,7 @@ jobs:
       - name: set up
         uses: actions/setup-go@v2
         with:
-          go-version: 1.15
+          go-version: 1.16
         id: go
       - uses: actions/checkout@v2
       - run: make
@@ -30,7 +30,7 @@ jobs:
       - run: go env
       - name: Slack Notification
         if: failure()
-        uses: rtCamp/action-slack-notify@v2.1.0
+        uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
       - uses: actions/upload-artifact@v2

@@ -16,7 +16,7 @@ WebAssembly (Wasm) として利用することを想定して実装されてい�
 
 ## ビルド
 
-Go バージョン 1.15 以降が必要になります。
+Go バージョン 1.16 以降が必要になります。
 
 `make` を実行すれば `dist/` 以下に `wasm.wasm` が生成されます。
 この `wasm.wasm` を `sora-js-sdk` の `Sora.initE2EE(...)` に指定してください。
