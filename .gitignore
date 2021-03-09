@@ -1,3 +1,5 @@
-*wasm.wasm*
 coverage.out
 coverage.html
+
+# Local Netlify folder
+.netlify
