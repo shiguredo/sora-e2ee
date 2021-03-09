@@ -1,4 +1,4 @@
-VERSION = 2020.2
+VERSION = 2021.1
 
 all:
 	GOOS=js GOARCH=wasm go build -ldflags='-X main.Version=$(VERSION)' -o dist/wasm.wasm cmd/wasm/main.go
