@@ -32,6 +32,9 @@ jobs:
         if: failure()
         uses: rtCamp/action-slack-notify@v2
         env:
+          SLACK_CHANNEL: sora-e2ee
+          SLACK_COLOR: danger
+          SLACK_TITLE: Failure test
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
       - uses: actions/upload-artifact@v2
         with:
