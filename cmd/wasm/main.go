@@ -8,7 +8,7 @@ import (
 var Version = "dev"
 
 func main() {
-	c := make(chan struct{}, 0)
+	c := make(chan struct{})
 	e2ee.RegisterCallbacks(Version)
 	<-c
 }
