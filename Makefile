@@ -1,6 +1,6 @@
 VERSION = 2020.2
 
-all:
+all: clean
 	GOOS=js GOARCH=wasm go build -ldflags='-X main.Version=$(VERSION)' -o dist/wasm.wasm cmd/wasm/main.go
 
 .PHONY: test
@@ -14,3 +14,6 @@ wasm_test:
 
 brotli:
 	brotli dist/wasm.wasm -o dist/wasm.wasm.br
+
+clean:
+	rm -f dist/wasm.wasm
