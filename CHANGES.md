@@ -12,6 +12,8 @@
 ## develop
 
 - [CHANGE] e2ee インスタンスを作成できるようにする
+- [UPDATE] go 1.17 に対応する
+- [UDPATE] wasm_exec.js を go 1.17 のものを利用する
 - [ADD] wasm.wasm のテストを追加する
 
 ## 2020.2
