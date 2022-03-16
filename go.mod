@@ -6,7 +6,7 @@ require (
 	github.com/chromedp/cdproto v0.0.0-20220217222649-d8c14a5c6edf // indirect
 	github.com/chromedp/chromedp v0.7.8
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/stretchr/testify v1.7.0
+	github.com/stretchr/testify v1.7.1
 	github.com/teserakt-io/golang-ed25519 v0.0.0-20210104091850-3888c087a4c8
 	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5
 	golang.org/x/sys v0.0.0-20220209214540-3681064d5158 // indirect
