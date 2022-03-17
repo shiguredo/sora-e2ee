@@ -1,6 +1,6 @@
 module github.com/shiguredo/sora-e2ee
 
-go 1.17
+go 1.18
 
 require (
 	github.com/chromedp/cdproto v0.0.0-20220217222649-d8c14a5c6edf // indirect
