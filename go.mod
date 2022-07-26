@@ -3,13 +3,13 @@ module github.com/shiguredo/sora-e2ee
 go 1.18
 
 require (
-	github.com/chromedp/cdproto v0.0.0-20220515234810-83d799542a04 // indirect
-	github.com/chromedp/chromedp v0.8.2
+	github.com/chromedp/cdproto v0.0.0-20220725225757-5988d9195a6c // indirect
+	github.com/chromedp/chromedp v0.8.3
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/stretchr/testify v1.8.0
 	github.com/teserakt-io/golang-ed25519 v0.0.0-20210104091850-3888c087a4c8
 	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5
-	golang.org/x/sys v0.0.0-20220520151302-bc2c85ada10a // indirect
+	golang.org/x/sys v0.0.0-20220715151400-c0bba94af5f8 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
