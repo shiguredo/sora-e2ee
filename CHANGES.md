@@ -11,6 +11,13 @@
 
 ## develop
 
+## 2020.2.1
+
+- [UPDATE] Go 1.19 に上げる
+- [UPDATE] github.com/stretchr/testify を v1.8.0 に上げる
+- [UPDATE] github.com/teserakt-io/golang-ed25519 を v0.0.0-20210104091850-3888c087a4c8 に上げる
+- [UPDATE] golang.org/x/crypto を v0.0.0-20220926161630-eccd6366d1be に上げる
+
 ## 2020.2
 
 - [CHANGE] e2ee を利用し始める時は e2ee.init() を必ず呼ぶように変更する
