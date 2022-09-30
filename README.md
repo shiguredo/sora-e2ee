@@ -16,7 +16,7 @@ WebAssembly (Wasm) として利用することを想定して実装されてい�
 
 ## ビルド
 
-Go バージョン 1.16 以降が必要になります。
+Go バージョン 1.19 以降が必要になります。
 
 `make` を実行すれば `dist/` 以下に `wasm.wasm` が生成されます。
 この `wasm.wasm` を `sora-js-sdk` の `Sora.initE2EE(...)` に指定してください。
@@ -131,8 +131,8 @@ sendrecv.on('disconnect', function(e) {
 ## ライセンス
 
 ```
-Copyright 2020-2021, Hiroshi Yoshida （Original Author)
-Copyright 2020-2021, Shiguredo Inc.
+Copyright 2020-2022, Hiroshi Yoshida （Original Author)
+Copyright 2020-2022, Shiguredo Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
