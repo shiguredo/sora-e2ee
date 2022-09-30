@@ -7,3 +7,9 @@ require (
 	github.com/teserakt-io/golang-ed25519 v0.0.0-20200315192543-8255be791ce4
 	golang.org/x/crypto v0.0.0-20201016220609-9e8e0b390897
 )
+
+require (
+	github.com/davecgh/go-spew v1.1.0 // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
+	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c // indirect
+)
