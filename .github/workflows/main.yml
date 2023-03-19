@@ -36,11 +36,11 @@ jobs:
           SLACK_COLOR: danger
           SLACK_TITLE: Failure test
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: wasm.wasm
           path: dist/wasm.wasm
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: wasm.wasm.br
           path: dist/wasm.wasm.br
