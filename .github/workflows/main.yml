@@ -17,7 +17,7 @@ jobs:
         with:
           go-version: 1.17
         id: go
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: make
       - run: make test
       - run: make wasm_test
