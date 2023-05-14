@@ -6,7 +6,7 @@ require (
 	github.com/chromedp/chromedp v0.9.1
 	github.com/stretchr/testify v1.8.2
 	github.com/teserakt-io/golang-ed25519 v0.0.0-20210104091850-3888c087a4c8
-	golang.org/x/crypto v0.8.0
+	golang.org/x/crypto v0.9.0
 )
 
 require (
@@ -19,6 +19,6 @@ require (
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	golang.org/x/sys v0.7.0 // indirect
+	golang.org/x/sys v0.8.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
